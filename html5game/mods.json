@@ -1,0 +1,22 @@
+[
+    {
+        "id": "2011x",
+        "name": "2011x",
+        "path": "frickmods/2011x/2011x/"
+    },
+    {
+        "id": "SuperSonic",
+        "name": "Super Sonic",
+        "path": "frickmods/SuperSonic/Super Sonic/"
+    },
+    {
+        "id": "Tails",
+        "name": "Tails",
+        "path": "frickmods/Tails/Tails/"
+    },
+    {
+        "id": "X",
+        "name": "X",
+        "path": "frickmods/X/X/"
+    }
+]
