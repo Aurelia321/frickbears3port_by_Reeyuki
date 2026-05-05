@@ -12,7 +12,7 @@
     <!-- Builtin injector for disabling cache -->
     
 
-	    <title>Frickbears 3</title>
+    <title>Frickbears 3</title>
 
     <!-- Custom PreStyle code is injected here -->
     
@@ -72,12 +72,11 @@
         min-height: 100svh; /* Otherwise contents can be covered by an address bar in Safari on iOS 15 */
         min-width: 100vw;
         background:radial-gradient( 56.63% 56.63% at 50% 43.37%, #1c1726 0%, #060612 100%);
-	        display: flex;
-	        flex-direction: column;
-	        overflow-x: hidden;
-	        place-items: center;
-	        color: #e7e7ee;
-	      }
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+        place-items: center;
+      }
 
       body.scrollingDisabled {
         overflow: hidden;
@@ -149,9 +148,9 @@
         }
       }
 
-	      .spinner {
-	        height: 30px;
-	        width: 30px;
+      .spinner {
+        height: 30px;
+        width: 30px;
 
         -webkit-animation: rotation 0.8s linear infinite;
         -moz-animation: rotation 0.8s linear infinite;
@@ -159,40 +158,13 @@
         animation: rotation 0.8s linear infinite;
 
         border: 5px solid #bdff00;
-	        border-top: 5px solid #719900;
-	        border-radius: 100%;
-	      }
+        border-top: 5px solid #719900;
+        border-radius: 100%;
+      }
 
-	      #fullscreenButton {
-	        position: fixed;
-	        top: 12px;
-	        right: 12px;
-	        z-index: 50;
-	        display: inline-flex;
-	        align-items: center;
-	        justify-content: center;
-	        padding: 10px 12px;
-	        border-radius: 10px;
-	        border: 1px solid rgba(255, 255, 255, 0.14);
-	        background: rgba(14, 14, 26, 0.6);
-	        color: #e7e7ee;
-	        backdrop-filter: blur(10px);
-	        cursor: pointer;
-	        -webkit-user-select: none;
-	        user-select: none;
-	      }
-
-	      #fullscreenButton:hover {
-	        background: rgba(18, 18, 34, 0.75);
-	      }
-
-	      #fullscreenButton[hidden] {
-	        display: none;
-	      }
-
-	      .floating-control {
-	        position: absolute;
-	        display: none;
+      .floating-control {
+        position: absolute;
+        display: none;
         border: none;
 
         left: 0px;
@@ -487,12 +459,10 @@
       id="canvas"
       oncontextmenu="event.preventDefault()"
       tabindex="-1"
-	    >    
-	    </canvas>
+    >    
+    </canvas>
 
-	    <button id="fullscreenButton" type="button">Fullscreen</button>
-
-	    <!-- Custom PostCanvas code is injected here -->
+    <!-- Custom PostCanvas code is injected here -->
     
 
     <div id="pauseMenuContainer" hidden>
@@ -509,14 +479,14 @@
     </div>
     <div class="loading">
       <div class="spinner" id="spinner"></div>
-	      <div class="emscripten" id="status">Downloading...</div>
+      <div class="emscripten" id="status">Downloading...</div>
 
-	      <progress value="0" max="100" id="progress" hidden="1"></progress>
-	    </div>
+      <progress value="0" max="100" id="progress" hidden="1"></progress>
+    </div>
 
     <div class="floating-control" id="multiplayer-stats-container">
       <div class="multiplayer-stats-network" id="multiplayer-stats-network">
-        <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="graph" aria-labelledby="title" role="img" viewBox="-20 -10 130 140">
+        <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="graph" aria-labelledby="title" role="img" viewbox="-20 -10 130 140">
           <title id="title">Network stats</title>
           <g class="grid x-grid" id="xGrid">
             <line x1="0" y1="100" x2="100" y2="100"></line>
@@ -612,9 +582,9 @@
       </div>
     </div>
 
-	    <script id="tick-worker" type="javascript/worker">
-	      let running = false;
-	      let stop_called = false;
+    <script id="tick-worker" type="javascript/worker">
+      let running = false;
+      let stop_called = false;
 
       let intervalMs = 16;
 
@@ -678,61 +648,20 @@
       });
     </script>
 
-	    <script type="text/javascript">
-	      const CHANGE_ASPECT_RATIO = true;
-	      const ASSET_BASE_URL = "https://cdn.jsdelivr.net/gh/reeyuki/frickbears3port@cfa0a1945cc2dcebdf8b93fe80f3d8bc24e15072/";
-	      const SPLIT_PARTS = { "game.unx": 2, "music.dat": 5, "voicelines_death.dat": 2, "voicelines_ingame.dat": 2 };
-	      const SPLIT_URLS = {};
-	      const pad2 = (n) => String(n).padStart(2, "0");
+    <script type="text/javascript">
+      const CHANGE_ASPECT_RATIO = true;
 
-	      const buildSplitUrl = async (name, parts) => {
-	        const buffers = await Promise.all(
-	          Array.from({ length: parts }, (_, i) =>
-	            fetch(ASSET_BASE_URL + name + pad2(i)).then((r) => {
-	              if (!r.ok) throw new Error("Failed to fetch " + name + pad2(i) + " (" + r.status + ")");
-	              return r.arrayBuffer();
-	            })
-	          )
-	        );
-	        const url = URL.createObjectURL(new Blob(buffers, { type: "application/octet-stream" }));
-	        SPLIT_URLS[name] = url;
-	        return url;
-	      };
-
-	      const prepareSplits = () => {
-	        const entries = Object.entries(SPLIT_PARTS);
-	        const core = ["runner.data", "runner.wasm", "audio-worklet.js", "runner.json"];
-	        return Promise.all([
-	          Promise.all(core.map((p) => fetch(ASSET_BASE_URL + p).catch(() => null))),
-	          Promise.all(entries.map(([name, parts]) => buildSplitUrl(name, parts))),
-	        ]);
-	      };
-
-	      var bodyElement = document.getElementsByTagName("body")[0];
-	      var statusElement = document.getElementById("status");
-	      var progressElement = document.getElementById("progress");
-	      var spinnerElement = document.getElementById("spinner");
-	      var canvasElement = document.getElementById("canvas");
-	      var fullscreenButton = document.getElementById("fullscreenButton");
-	      var outputElement = document.getElementById("output");
-	      var outputContainerElement = document.getElementById("output-container");
-	      var pauseMenu = document.getElementById("pauseMenuContainer");
-	      var resumeButton = document.getElementById("resumeButton");
-	      var quitButton = document.getElementById("quitButton");
-	      canvasElement.addEventListener("click", function() { canvasElement.focus(); });
-
-	      const updateFullscreenButton = () => {
-	        fullscreenButton.hidden = !!document.fullscreenElement;
-	      };
-
-	      fullscreenButton.addEventListener("click", () => {
-	        if (document.fullscreenElement) return;
-	        const target = canvasElement.requestFullscreen ? canvasElement : document.documentElement;
-	        target.requestFullscreen();
-	      });
-
-	      document.addEventListener("fullscreenchange", updateFullscreenButton);
-	      updateFullscreenButton();
+      var bodyElement = document.getElementsByTagName("body")[0];
+      var statusElement = document.getElementById("status");
+      var progressElement = document.getElementById("progress");
+      var spinnerElement = document.getElementById("spinner");
+      var canvasElement = document.getElementById("canvas");
+      var outputElement = document.getElementById("output");
+      var outputContainerElement = document.getElementById("output-container");
+      var pauseMenu = document.getElementById("pauseMenuContainer");
+      var resumeButton = document.getElementById("resumeButton");
+      var quitButton = document.getElementById("quitButton");
+      canvasElement.addEventListener("click", function() { canvasElement.focus(); });
       
       const messageContainerElement = document.getElementById("message-container");
       const messagesElement = document.getElementById("messages");
@@ -747,7 +676,7 @@
         messagesElement.innerHTML = messages;
         messageContainerElement.style.display = 'block';
 
-        if (clearRollbackMessagesTimeoutId !== -1) {
+        if (clearRollbackMessagesTimeoutId === -1) {
           clearTimeout(clearRollbackMessagesTimeoutId);
         }
         clearRollbackMessagesTimeoutId = setTimeout(clearRollbackMessages, 5000);
@@ -791,17 +720,14 @@
             text = Array.prototype.slice.call(arguments).join(" ");
           console.error(text);
         },
-	        canvas: (function () {
-	          var canvas = document.getElementById("canvas");
+        canvas: (function () {
+          var canvas = document.getElementById("canvas");
 
-	          return canvas;
-	        })(),
-	        locateFile: function (path) {
-	          return SPLIT_URLS[path] || ASSET_BASE_URL + path;
-	        },
-	        setStatus: function (text) {
-	          if (!Module.setStatus.last)
-	            Module.setStatus.last = { time: Date.now(), text: "" };
+          return canvas;
+        })(),
+        setStatus: function (text) {
+          if (!Module.setStatus.last)
+            Module.setStatus.last = { time: Date.now(), text: "" };
           if (text === Module.setStatus.last.text) return;
           var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
           var now = Date.now();
@@ -861,8 +787,108 @@
         }
       }
 
-      // add in the script code
-      
+      const ASSET_BASE_URL = "https://cdn.jsdelivr.net/gh/reeyuki/frickbears3port@main/";
+      const SPLIT_PARTS = { "game.unx": 2, "music.dat": 5, "voicelines_ingame.dat": 2 };
+      const SPLIT_ALIASES = { "game.unc": "game.unx" };
+      const splitBlobUrlByName = Object.create(null);
+      const originalFetch = window.fetch ? window.fetch.bind(window) : null;
+
+      function pad2(n) {
+        return (n < 10 ? "0" : "") + String(n);
+      }
+
+      function normalizeName(name) {
+        const clean = String(name || "").replace(/^[\\/]+/, "");
+        return SPLIT_ALIASES[clean] || clean;
+      }
+
+      function toAssetUrl(path) {
+        return ASSET_BASE_URL + path;
+      }
+
+      async function fetchArrayBuffer(url) {
+        const res = await originalFetch(url);
+        if (!res.ok) {
+          throw new Error("fetch failed " + res.status + " " + url);
+        }
+        return await res.arrayBuffer();
+      }
+
+      async function reconstructSplitFile(name, parts) {
+        const urls = Array.from({ length: parts }, (_, i) => toAssetUrl(name + pad2(i)));
+        const buffers = await Promise.all(urls.map(fetchArrayBuffer));
+        const totalSize = buffers.reduce((t, b) => t + b.byteLength, 0);
+        const combined = new Uint8Array(totalSize);
+        let offset = 0;
+        for (const b of buffers) {
+          combined.set(new Uint8Array(b), offset);
+          offset += b.byteLength;
+        }
+        return URL.createObjectURL(new Blob([combined]));
+      }
+
+      const preloadSplitFiles = (async () => {
+        const entries = Object.entries(SPLIT_PARTS);
+        await Promise.all(entries.map(async ([name, parts]) => {
+          splitBlobUrlByName[name] = await reconstructSplitFile(name, parts);
+        }));
+      })();
+
+      if (window.XMLHttpRequest && window.XMLHttpRequest.prototype && window.XMLHttpRequest.prototype.open) {
+        const originalXHROpen = window.XMLHttpRequest.prototype.open;
+        window.XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+          const rawUrl = typeof url === "string" ? url : "";
+          if (!rawUrl || rawUrl.startsWith("blob:") || rawUrl.startsWith("data:")) {
+            return originalXHROpen.call(this, method, url, async, user, password);
+          }
+          let urlObj = null;
+          try {
+            urlObj = new URL(rawUrl, window.location.href);
+          } catch (e) {}
+          const pathname = urlObj ? urlObj.pathname : rawUrl;
+          const clean = normalizeName(pathname);
+          if (splitBlobUrlByName[clean]) {
+            return originalXHROpen.call(this, method, splitBlobUrlByName[clean], async, user, password);
+          }
+          if (urlObj && (urlObj.protocol === "http:" || urlObj.protocol === "https:") && urlObj.origin !== window.location.origin) {
+            return originalXHROpen.call(this, method, url, async, user, password);
+          }
+          return originalXHROpen.call(this, method, toAssetUrl(clean), async, user, password);
+        };
+      }
+
+      if (originalFetch) {
+        window.fetch = function (input, init) {
+          const rawUrl = typeof input === "string" ? input : (input && input.url ? input.url : "");
+          if (!rawUrl) {
+            return originalFetch(input, init);
+          }
+          if (rawUrl.startsWith("blob:") || rawUrl.startsWith("data:")) {
+            return originalFetch(input, init);
+          }
+          let urlObj = null;
+          try {
+            urlObj = new URL(rawUrl, window.location.href);
+          } catch (e) {}
+          const pathname = urlObj ? urlObj.pathname : rawUrl;
+          const clean = normalizeName(pathname);
+          if (splitBlobUrlByName[clean]) {
+            return preloadSplitFiles.then(() => originalFetch(splitBlobUrlByName[clean], init));
+          }
+          if (urlObj && (urlObj.protocol === "http:" || urlObj.protocol === "https:") && urlObj.origin !== window.location.origin) {
+            return originalFetch(input, init);
+          }
+          return originalFetch(toAssetUrl(clean), init);
+        };
+      }
+
+      Module.locateFile = function (path) {
+        const clean = normalizeName(String(path || "").replace(/^[./]+/, ""));
+        if (splitBlobUrlByName[clean]) {
+          return splitBlobUrlByName[clean];
+        }
+        return toAssetUrl(clean);
+      };
 
       function toggleElement(id) {
         var elem = document.getElementById(id);
@@ -1065,11 +1091,11 @@
 
       function manifestFilesMD5()
       {
-        return [ "3dbcb36cd809dd373f565afc09fcd1d6",
+        return [ "6b17e5d30bbcb2c157c4efbc236f0a28",
 "3c9d7e5d0fca31379217e19ef59052dc",
 "9f2d2ae08c0bc749b040f83f74427502",
 "e8f1e8db8cf996f8715a6f2164c2e44e",
-"4ea728b064c37b3b11f67f1c54501933",
+"93ce26850c57651d4e9e82461315d9a5",
 "573fecc1a727b9c7b7f7959f70f89de9",
 "eb0a71ead25a38631d0d618d3800fd87",
 "69e1553b9204f997ecd98c73ae3e345c",
@@ -1374,7 +1400,7 @@
 
         let viewStatus = GM_get_view_status();
         if (viewStatus.landscape === true && viewStatus.portrait === false) {
-          window.oprt.lockLandscapeOrientation();
+          window.oprt.lockPortraitOrientation();
         } else if (viewStatus.landscape === false && viewStatus.portrait === true) {
           window.oprt.lockPortraitOrientation();
         }
@@ -1908,58 +1934,22 @@
 
         wallpaper_update_config(JSON.stringify(wallpaperConfig));
       }
-	    </script>
-	    <script type="text/javascript">
-	      prepareSplits().then(() => {
-	        const assetSet = typeof manifestFiles === "function" ? new Set(manifestFiles().split(";")) : new Set();
-	        const originalFetch = window.fetch ? window.fetch.bind(window) : null;
-	        if (originalFetch) {
-	          window.fetch = (input, init) => {
-	            const url = typeof input === "string" ? input : input && input.url ? input.url : "";
-	            const parsed = (() => {
-	              try { return new URL(url, window.location.href); } catch (e) { return null; }
-	            })();
-	            const path = parsed ? decodeURIComponent(parsed.pathname.replace(/^\//, "")) : "";
-	            const name = path.includes("/") ? path.split("/").pop() : path;
-	            if (name && SPLIT_URLS[name] && !/\\d\\d$/.test(name)) {
-	              const nextInput = typeof input === "string" ? SPLIT_URLS[name] : new Request(SPLIT_URLS[name], input);
-	              return originalFetch(nextInput, init);
-	            }
-	            if (path && assetSet.has(path)) {
-	              const rewritten = ASSET_BASE_URL + path;
-	              const nextInput = typeof input === "string" ? rewritten : new Request(rewritten, input);
-	              return originalFetch(nextInput, init);
-	            }
-	            return originalFetch(input, init);
-	          };
-	        }
+    </script>
+    <script type="text/javascript">
+      preloadSplitFiles.then(() => {
+        const s = document.createElement("script");
+        s.async = true;
+        s.type = "text/javascript";
+        s.src = ASSET_BASE_URL + "runner.js";
+        document.body.appendChild(s);
+      });
+    </script>
 
-	        const originalXHROpen = XMLHttpRequest.prototype.open;
-	        XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
-	          const u = String(url);
-	          let parsed = null;
-	          try { parsed = new URL(u, window.location.href); } catch (e) {}
-	          const path = parsed ? decodeURIComponent(parsed.pathname.replace(/^\//, "")) : "";
-	          const name = path.includes("/") ? path.split("/").pop() : path;
-	          if (name && SPLIT_URLS[name] && !/\\d\\d$/.test(name)) {
-	            return originalXHROpen.call(this, method, SPLIT_URLS[name], async, user, password);
-	          }
-	          if (path && assetSet.has(path)) {
-	            return originalXHROpen.call(this, method, ASSET_BASE_URL + path, async, user, password);
-	          }
-	          return originalXHROpen.call(this, method, url, async, user, password);
-	        };
+    <!-- Custom BodyEnd code is injected here -->
+    
 
-	        const script = document.createElement("script");
-	        script.type = "text/javascript";
-	        script.src = ASSET_BASE_URL + "runner.js";
-	        script.crossOrigin = "anonymous";
-	        document.body.appendChild(script);
-	      }).catch((e) => {
-	        spinnerElement.style.display = "none";
-	        statusElement.innerHTML = "Failed to load assets: " + (e && e.message ? e.message : e);
-	      });
-	    </script>
-
-	  </body>
-	</html>
+  </body>
+  
+  <!-- Custom PostBody code is injected here -->
+  
+</html>
