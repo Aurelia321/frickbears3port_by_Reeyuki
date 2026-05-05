@@ -798,7 +798,8 @@
       }
 
       function normalizeName(name) {
-        const clean = String(name || "").replace(/^[\\/]+/, "");
+        let clean = String(name || "").replace(/^[\\/]+/, "");
+        clean = clean.replace(/^frickbears3port\//, "");
         const aliased = SPLIT_ALIASES[clean] || clean;
         const basename = aliased.split("/").pop();
         if (SPLIT_PARTS[basename] || SPLIT_ALIASES[basename]) {
