@@ -799,7 +799,12 @@
 
       function normalizeName(name) {
         const clean = String(name || "").replace(/^[\\/]+/, "");
-        return SPLIT_ALIASES[clean] || clean;
+        const aliased = SPLIT_ALIASES[clean] || clean;
+        const basename = aliased.split("/").pop();
+        if (SPLIT_PARTS[basename] || SPLIT_ALIASES[basename]) {
+          return SPLIT_ALIASES[basename] || basename;
+        }
+        return aliased;
       }
 
       function toAssetUrl(path) {
@@ -873,7 +878,7 @@
           const pathname = urlObj ? urlObj.pathname : rawUrl;
           const clean = normalizeName(pathname);
           if (splitBlobUrlByName[clean]) {
-            return preloadSplitFiles.then(() => originalFetch(splitBlobUrlByName[clean], init));
+            return originalFetch(splitBlobUrlByName[clean], init);
           }
           if (urlObj && (urlObj.protocol === "http:" || urlObj.protocol === "https:") && urlObj.origin !== window.location.origin) {
             return originalFetch(input, init);
