@@ -1,23 +1,14 @@
 <!DOCTYPE html>
 <html lang="en-us">
 
-  <!-- Custom PreHead code is injected here -->
-  
-
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <!-- Builtin injector for disabling cache -->
-    
+		    <title>Frickbears 3</title>
 
-	    <title>Frickbears 3</title>
-
-    <!-- Custom PreStyle code is injected here -->
-    
-
-    <style>
+	    <style>
       @-webkit-keyframes rotation {
         from {
           -webkit-transform: rotate(0deg);
@@ -433,27 +424,9 @@
       }
     </style>
 
-    <!-- Custom PostStyle code is injected here -->
-    
-
-    <!-- Builtin injector for injecting flurry analytics code -->
-    
   </head>
 
-  <!-- Custom PostHead code is injected here -->
-  
-
-  <!-- Custom PreBody code is injected here -->
-  
-
   <body>
-
-    <!-- Custom BodyStart code is injected here -->
-    
-
-    <!-- Custom PreCanvas code is injected here -->
-    
-
     <canvas
       class="emscripten"
       id="canvas"
@@ -461,9 +434,6 @@
       tabindex="-1"
     >    
     </canvas>
-
-    <!-- Custom PostCanvas code is injected here -->
-    
 
     <div id="pauseMenuContainer" hidden>
       <div id="pauseMenuBorder">
@@ -555,9 +525,6 @@
       </div>
     </div>
     <div class="output-container" id="output-container" >
-      <!-- Custom Button code is injected here -->
-      
-
       <button class="output-button" id="stats-button" style="visibility: hidden" onclick="toggleElement('multiplayer-stats-container')">
         Toggle Stats
       </button>
@@ -575,9 +542,7 @@
         Toggle configurator
       </button>
     </div>
-    <!-- The wallpaper config is displayed in an iframe to make it possible to use keyboard for entering values (it's consumed by
-        the runner in the original document). -->
-    <iframe class="floating-control" id="wallpaper-config-iframe" src="about:blank"></iframe>
+	    <iframe class="floating-control" id="wallpaper-config-iframe" src="about:blank"></iframe>
 
     <div id="message-container">
       <div id="messages">
@@ -663,29 +628,34 @@
     </script>
 
 	    <script type="text/javascript">
-	      (function () {
-	        const ASSET_BASE = "https://cdn.jsdelivr.net/gh/reeyuki/frickbears3port@4e185a27651d1d331a2e37f40f3d4e7a431b5b03/";
-	        const SPLIT_SPEC = [["game.unx", 2], ["music.dat", 5], ["voicelines_ingame.dat", 2]];
-	        const SPLITS = Object.fromEntries(SPLIT_SPEC);
-	        const splitCache = new Map();
-	        const nativeFetch = window.fetch ? window.fetch.bind(window) : null;
-	        const NativeXMLHttpRequest = window.XMLHttpRequest;
-	        const pad2 = function (n) { return String(n).padStart(2, "0"); };
-	        const urlInfo = function (input) {
-	          if (typeof input === "string") {
-	            try {
-	              const u = new URL(input, window.location.href);
-	              const base = new URL(ASSET_BASE, window.location.href);
-	              if (u.href.startsWith(base.href)) return { rewrite: true, path: u.href.slice(base.href.length).replace(/^\/+/, "").split("?")[0].split("#")[0] };
-	              if (u.origin === window.location.origin) return { rewrite: true, path: u.pathname.replace(/^\/+/, "").split("?")[0].split("#")[0] };
-	              return { rewrite: false, url: input };
-	            } catch (e) {
-	              return { rewrite: true, path: String(input).replace(/^\/+/, "").split("?")[0].split("#")[0] };
-	            }
-	          }
-	          if (input && typeof input.url === "string") return urlInfo(input.url);
-	          return { rewrite: false, url: "" };
-	        };
+		      (function () {
+		        const ASSET_BASE = "https://cdn.jsdelivr.net/gh/reeyuki/frickbears3port@main/";
+		        const SPLIT_SPEC = [["game.unx", 2], ["music.dat", 5], ["voicelines_ingame.dat", 2]];
+		        const SPLITS = Object.fromEntries(SPLIT_SPEC);
+		        const ALIASES = { "game.unc": "game.unx" };
+		        const splitCache = new Map();
+		        const nativeFetch = window.fetch ? window.fetch.bind(window) : null;
+		        const NativeXMLHttpRequest = window.XMLHttpRequest;
+		        const pad2 = function (n) { return String(n).padStart(2, "0"); };
+		        const normalizePath = function (path) {
+		          const p = String(path || "").replace(/^\/+/, "").split("?")[0].split("#")[0];
+		          return ALIASES[p] || p;
+		        };
+		        const urlInfo = function (input) {
+		          if (typeof input === "string") {
+		            try {
+		              const u = new URL(input, window.location.href);
+		              const base = new URL(ASSET_BASE, window.location.href);
+		              if (u.href.startsWith(base.href)) return { rewrite: true, path: normalizePath(u.href.slice(base.href.length)) };
+		              if (u.origin === window.location.origin) return { rewrite: true, path: normalizePath(u.pathname) };
+		              return { rewrite: false, url: input };
+		            } catch (e) {
+		              return { rewrite: true, path: normalizePath(input) };
+		            }
+		          }
+		          if (input && typeof input.url === "string") return urlInfo(input.url);
+		          return { rewrite: false, url: "" };
+		        };
 	        const toCdnUrl = function (path) { return ASSET_BASE + path; };
 	        const concatArrayBuffers = function (buffers) {
 	          let total = 0;
@@ -695,13 +665,15 @@
 	          for (let i = 0; i < buffers.length; i++) { out.set(new Uint8Array(buffers[i]), off); off += buffers[i].byteLength; }
 	          return out.buffer;
 	        };
-	        const fetchSplitArrayBuffer = async function (path, count) {
-	          if (splitCache.has(path)) return splitCache.get(path);
-	          const parts = await Promise.all(Array.from({ length: count }, function (_, i) { return nativeFetch(toCdnUrl(path + pad2(i))).then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.arrayBuffer(); }); }));
-	          const ab = concatArrayBuffers(parts);
-	          splitCache.set(path, ab);
-	          return ab;
-	        };
+		        const fetchSplitArrayBuffer = async function (path, count) {
+		          const p = normalizePath(path);
+		          if (splitCache.has(p)) return splitCache.get(p);
+		          const parts = await Promise.all(Array.from({ length: count }, function (_, i) { return nativeFetch(toCdnUrl(p + pad2(i))).then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.arrayBuffer(); }); }));
+		          const ab = concatArrayBuffers(parts);
+		          splitCache.set(p, ab);
+		          return ab;
+		        };
+		        window.__SPLIT_PREFETCH__ = Promise.all(SPLIT_SPEC.map(function (x) { return fetchSplitArrayBuffer(x[0], x[1]); }));
 	        if (nativeFetch) {
 	          window.fetch = function (resource, init) {
 	            const info = urlInfo(resource);
@@ -1167,11 +1139,11 @@
 
       function manifestFilesMD5()
       {
-        return [ "6b17e5d30bbcb2c157c4efbc236f0a28",
+        return [ "944e4ca42d1f509a495bdec2f2eb3b10",
 "3c9d7e5d0fca31379217e19ef59052dc",
 "9f2d2ae08c0bc749b040f83f74427502",
 "e8f1e8db8cf996f8715a6f2164c2e44e",
-"1bd3cbb78fe0ad91377af7351cad9439",
+"f044c3efb57412da88a965671b40b2e3",
 "573fecc1a727b9c7b7f7959f70f89de9",
 "eb0a71ead25a38631d0d618d3800fd87",
 "69e1553b9204f997ecd98c73ae3e345c",
