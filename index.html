@@ -638,7 +638,11 @@
 		        const NativeXMLHttpRequest = window.XMLHttpRequest;
 		        const pad2 = function (n) { return String(n).padStart(2, "0"); };
 		        const normalizePath = function (path) {
-		          const p = String(path || "").replace(/^\/+/, "").split("?")[0].split("#")[0];
+		          let p = String(path || "").split("?")[0].split("#")[0].replace(/^\/+/, "");
+		          const locDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1).replace(/^\/+/, "");
+		          if (locDir && p.startsWith(locDir)) p = p.slice(locDir.length).replace(/^\/+/, "");
+		          const filename = p.split("/").pop();
+		          if (SPLITS[filename] || ALIASES[filename]) return ALIASES[filename] || filename;
 		          return ALIASES[p] || p;
 		        };
 		        const urlInfo = function (input) {
@@ -795,6 +799,7 @@
 	          window.XMLHttpRequest = SplitAwareXMLHttpRequest;
 	        }
 	        window.__ASSET_BASE__ = ASSET_BASE;
+	        window.__NORMALIZE_PATH__ = normalizePath;
 	      })();
 	      const CHANGE_ASPECT_RATIO = true;
 
@@ -840,7 +845,11 @@
 	      var Module = {
 	        preRun: [],
 	        postRun: [],
-	        locateFile: function (path, prefix) { return window.__ASSET_BASE__ + String(path).replace(/^\/+/, ""); },
+	        locateFile: function (path, prefix) {
+	          const p = String(path).replace(/^\/+/, "");
+	          const normalized = window.__NORMALIZE_PATH__ ? window.__NORMALIZE_PATH__(p) : p;
+	          return window.__ASSET_BASE__ + normalized;
+	        },
 	        print: (function () {
 	          var element = document.getElementById("output");
 	          if (element) element.value = ""; // clear browser cache
