@@ -1,0 +1,40 @@
+{"DIALOGUE":
+	[
+		["...", "Charlie"],
+		["That was, eventful. But that does at least show me a good few things.", "Charlie"],
+		["There's still spirits in there, no idea how MANY, but they're in there.", "Charlie"],
+		["_skip"],
+		["And what was up with that puppet thing? Felt like it was staring at me all night-.", "Charlie"],
+		["_delay", 120],
+		["_func", [["playSound", "sfxPhoneRing", 10, true]]],
+		["...Huh? Who calls someone at 6:26 in the morning?", "Charlie"],
+		["_func",
+			[
+				["stopSound", "sfxPhoneRing"],
+				["playSound", "sfxPhonePickup", 10, false]
+			]
+		],
+		["_delay", 120],
+		
+		["Ring ring! Hey, is this stupid thing on?", "The Boss"],
+		["_func", [["playMusic", "musMidnight_TheBoss", 0.5]]],
+		["Hey, stooge! Great work tonight or whatever.", "The Boss"],
+		["Oh, hi Boss. Did something happen?", "Charlie"],
+		["Yes! Your good-for-nothing coworker isn't picking up his calls, so it looks like you get to work overtime!", "The Boss"],
+		["So I heard over the phone. Uh, check under the lockers.", "Charlie"],
+		["...Sure. Go to the address I sent you! Some chump will explain the rest when you get there.", "The Boss"],
+		["Good luck or whatever!", "The Boss"],
+		["_skip", true],
+		["Hey, I was wondering about that marionette-", "Charlie"],
+		["_delay", 120],
+		["_func",
+			[
+				["stopSound", "musMidnight_TheBoss"],
+				["playSound", "sfxPhonePickup", 10, false]
+			]
+		],
+		
+		["-thing. ...Alright then. Guess I'm on my own. Wonder if the girls are up yet, might be nice to talk to them on the way there.", "Charlie"],
+		["_func", [["salvage"]]]
+	]
+} 
