@@ -1,0 +1,35 @@
+{
+	"player_height": 50,
+	"player_sneak_height": 16,
+	
+	"theme_intro": ["musIntro.ogg", 1],
+	"theme_game_over": ["sfxGameOver.ogg", 1],
+	"theme_victory": ["sfxVictory.ogg", 1],
+	"theme_victory_night5": ["sfxVictory5.ogg", 1],
+	"theme_victory_night6": ["sfxVictory6.ogg", 1],
+	
+	"music_player":
+	[
+		["Charlie - Guard Introduction", "musIntro.ogg", 100, "FNaF 2 Song Big Band Version", "The 8-Bit Big Band", [33.0755, 69.6519]],
+		["Charlie - Game Over", "sfxGameOver.ogg", 200, "Game Over", "Sega Rally 2 (Dreamcast)"],
+		["Charlie - 6 A.M.", "sfxVictory.ogg", 100, "It’s Been So Long (Ending)", "The Living Tombstone"],
+		["Charlie - 6 A.M. (Night 5)", "sfxVictory5.ogg", 100, "It’s Been So Long (Instrumental)", "The Living Tombstone"],
+		["Charlie - 6 A.M. (Night 6)", "sfxVictory6.ogg", 150, "It’s Been So Long (Beat Drop)", "The Living Tombstone"]
+	],
+
+	"maze_rules_poster": [["...I... don't even wanna think about what happened for that fourth one to be instated...", "Charlie"]],
+	"maze_newspaper_1": [["...Right.", "Charlie"]],
+	"maze_newspaper_2": [["...Nothing out of the ordinary.", "Charlie"]],
+	"maze_newspaper_3": [["...Heh.", "Charlie"]],
+	
+	"upgrade_cadet_story": [["Pretty sure I've heard this one, everyone has.", "Charlie"],
+		["YOU ASKED FOR A STORY. I AM TELLING YOU A STORY. I DO NOT SEE THE ISSUE.", "Upgrade Cadet"],
+		["I paid money for it!", "Charlie"],
+		["IT IS A GOOD STORY. ANY ALTERATIONS WOULD DISTRACT FROM ITS MESSAGE.", "Upgrade Cadet"],
+		["Never said it wasn't... Whatever.", "Charlie"]],
+	"withered_bonnie": "marioneta sin cuerdas",
+	"bb_quiz_answer": "Ghosts from my past",
+	"helpy": [["Is that safe-", "Charlie"]],
+	"psy_friend_fredbear_house": [["I know this place, why would he send me here of all places?", "Charlie"]],
+	"dreadbear": [["YOU! STRIPES!", "Dreadbear"]]
+}
