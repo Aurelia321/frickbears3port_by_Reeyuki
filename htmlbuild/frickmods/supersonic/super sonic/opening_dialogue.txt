@@ -1,0 +1,9 @@
+{
+	"DIALOGUE":["Well it's quite the name for a rebrand, but I'm not here to make comments about changes to a brand that should have died a LONG time ago.",
+		"I'm here to make some money to pay my tuition, rent, and maybe wrap up a little bit of work my dad never managed to finish.",
+		"At least, that's what it said in his last notes in his journal. But y'know what, this place pays the best in the area at the moment, so, why not?",
+		"I mean couldn't result in more trauma than I've already gained over the past few years, right?",
+		"...Right?"],
+
+	"FIRST_PERSON":"true"
+} 
